@@ -11,6 +11,8 @@
 from control_panel import views
 from django.urls import path
 
+app_name = 'control_panel'
+
 urlpatterns = [
     path('', views.home, name='home'),
 
