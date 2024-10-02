@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'control_panel',
+    'sitesetup',
 ]
 
 MIDDLEWARE = [
@@ -37,6 +38,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sitesetup.context_processors.site_settings',
+    'sitesetup.context_processors.menu_settings',
 ]
 
 ROOT_URLCONF = 'dashboard.urls'
