@@ -2,7 +2,7 @@ from .models import *
 
 def site_settings(request):
     try:
-        site_setup = SiteSetup.objects.all()
+        site_setup = SiteSetup.objects.first()
     except SiteSetup.DoesNotExist:
         site_setup = None
     
@@ -13,27 +13,19 @@ def site_settings(request):
     return context
 
 def menu_settings(request):
-    try:
-        menu = Menu.objects.all()
-    except Menu.DoesNotExist:
-        menu = None
-        print('Erro: Não existem menus, ou não foram cadastrados')
+    menu_principal = Menu.objects.all()
+    sub_menu = SubMenu.objects.all()
+    sub_sub_menu = SubSubMenu.objects.all()
 
-    try:
-        sub_menu = SubMenu.objects.all()
-    except SubMenu.DoesNotExist:
-        sub_menu = None
-        print('Erro: Não existem sub-menus, ou não foram cadastrados')
-    try:
-        sub_sub_menu = SubSubMenu.objects.all()
-    except SubSubMenu.DoesNotExist:
-        sub_sub_menu = None
-        print('Erro: Não existem sub-sub-menus, ou não foram cadastrados')
-
-    context = {
-        'menu': menu,
-        'sub_menu': sub_menu,
-        'sub_sub_menu': sub_sub_menu,
-    }
-
-    return context
+    if menu_principal.exists() or sub_menu.exists() or sub_sub_menu.exists():
+        return {
+            'menu_principal': menu_principal,
+            'sub_menu': sub_menu,
+            'sub_sub_menu': sub_sub_menu,
+        }
+    else:
+        return {
+            'menu_principal': None,
+            'sub_menu': None,
+            'sub_sub_menu': None,
+        }
