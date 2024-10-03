@@ -1,0 +1,15 @@
+{% extends "base/layout-main.html" %}
+{% block content %}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Administração</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Painel de controle</li>
+            </ol>
+            {% include "partials/form.html" %}
+        </div>
+    </main>
+    {% include "partials/footer.html" %}
+</div>
+{% endblock content %}
