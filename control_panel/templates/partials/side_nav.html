@@ -59,9 +59,13 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Tables
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url "control_panel:site_setup" %}">
                     <div class="sb-nav-link-icon"><i class="fas fa-bars"></i></div>
                     Configurações
+                </a>
+                <a class="nav-link" href="{% url "control_panel:main_menus" %}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-ellipsis"></i></div>
+                    Manutenção do Menu
                 </a>
             </div>
         </div>

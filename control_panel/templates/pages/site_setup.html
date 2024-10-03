@@ -3,11 +3,20 @@
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">Administração</h1>
+            <h1 class="mt-4">{{site_setup.nome}}</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Painel de controle</li>
+                <li class="breadcrumb-item active">Configurações</li>
             </ol>
-            {% include "partials/form.html" %}
+            <div class="d-flex flex-row flex-wrap gap-2">
+                {% include "partials/form.html" %}
+
+                {% if site_setup.logo.url %}
+                <div class="rounded border border-black d-flex flex-column p-2">
+                    <label for="#img-logo">Logo</label>
+                    <img id="img-logo" src="{{site_setup.logo.url}}" class="rounded" width="200px" height="200px" alt="Logotipo">
+                </div>
+                {% endif %}
+            </div>
         </div>
     </main>
     {% include "partials/footer.html" %}
