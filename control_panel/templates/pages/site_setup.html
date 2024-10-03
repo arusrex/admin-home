@@ -10,7 +10,7 @@
             <div class="d-flex flex-row flex-wrap gap-2">
                 {% include "partials/form.html" %}
 
-                {% if site_setup.logo.url %}
+                {% if site_setup.logo %}
                 <div class="rounded border border-black d-flex flex-column p-2">
                     <label for="#img-logo">Logo</label>
                     <img id="img-logo" src="{{site_setup.logo.url}}" class="rounded" width="200px" height="200px" alt="Logotipo">
