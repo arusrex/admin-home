@@ -5,13 +5,13 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">{{site_setup.nome}}</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Menus Principais</li>
+                <li class="breadcrumb-item active">Sub-Sub-Menus</li>
             </ol>
             {% include "partials/form.html" %}
             <div class="card my-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
-                    Manutenção de Opções e Menus
+                    Manutenção de Sub-Sub-Menus
                 </div>
                 <div class="card-body">
                     <table id="datatablesSimple">
@@ -19,7 +19,7 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>Link/URL</th>
-                                <th>Sub Menus</th>
+                                <th>Sub-Menus Vinculados</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -27,29 +27,19 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>Link/URL</th>
-                                <th>Sub Menus</th>
+                                <th>Sub-Menus Vinculados</th>
                                 <th>Ações</th>
                             </tr>
                         </tfoot>
                         <tbody>
-                            {% for menu in menu_principal %}
+                            {% for menu in menu_terciario %}
                                 <tr>
                                     <td>{{menu.nome}}</td>
                                     <td>{{menu.link|default_if_none:"Sem Link/URL"}}</td>
-                                    {% if menu.sub_menu.all %}
-                                        <td>
-                                            <ul>
-                                                {% for subMenu in menu.sub_menu.all %}
-                                                    <li>{{subMenu.nome}}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </td>
-                                    {% else %}
-                                        <td>Sem Sub Menus Cadastrados</td>
-                                    {% endif %}
+                                    <td>{{menu.sub_menu}}</td>
                                     <td>
-                                        <a href="{% url "control_panel:edit_main_menus" menu.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="{% url "control_panel:delete_main_menus" menu.id %}"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="{% url "control_panel:edit_ss_menu" menu.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="{% url "control_panel:delete_ss_menu" menu.id %}"><i class="fa-solid fa-trash"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}

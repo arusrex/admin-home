@@ -7,6 +7,7 @@ def home(request):
 
 def site_setup(request):
     obj = SiteSetup.objects.first()
+    form_site_setup = SiteSetupForm(instance=obj)
     if request.method == 'POST':
         form_site_setup = SiteSetupForm(request.POST, request.FILES, instance=obj)
         try:
@@ -17,15 +18,13 @@ def site_setup(request):
         except Exception as error:
             print(f'Registro não realizado conforme o erro: {error}')
             return redirect('control_home:home')
-    else:
-        form_site_setup = SiteSetupForm(instance=obj)
-        context = {
-            'form': form_site_setup,
-        }
+    context = {
+        'form': form_site_setup,
+    }
     return render(request, 'pages/site_setup.html', context)
 
-
 def main_menus(request):
+    form = MenuForm()
     if request.method == 'POST':
         form = MenuForm(request.POST)
         try:
@@ -36,16 +35,14 @@ def main_menus(request):
         except Exception as error:
             print(f'Erro ao registrar o menu: {error}')
             return redirect('control_panel:main_menus')
-    else:
-        form = MenuForm()
-        context = {
-            'form': form,
-        }
-
+    context = {
+        'form': form,
+    }
     return render(request, 'pages/menu_setup.html', context)
 
 def edit_main_menu(request, id):
     obj = Menu.objects.get(id=id)
+    form = MenuForm(instance=obj)
     if request.method == 'POST':
         form = MenuForm(request.POST, instance=obj)
         try:
@@ -56,20 +53,107 @@ def edit_main_menu(request, id):
         except Exception as error:
             print(f'Erro ao salvar o menu: {error}')
             return redirect('control_panel:main_menus')
-    else:
-        form = MenuForm(instance=obj)
-        context = {
-            'form': form,
-        }
+    context = {
+        'form': form,
+    }
     return render(request, 'pages/menu_setup.html', context)
 
 def delete_main_menu(request, id):
-    obj = Menu.objects.get(id=id)
     try:
-        if obj:
-            obj.delete()
-            print(f'{obj} - Menu deletado com sucesso')
+        obj = Menu.objects.get(id=id)
+        obj.delete()
+        print(f'{obj} - Menu deletado com sucesso')
+        return redirect('control_panel:main_menus')
     except Exception as error:
         print(f'Erro ao deletar menu: {error}')
-    return redirect('control_panel:main_menus')
+        return redirect('control_panel:main_menus')
 
+def sub_menus(request):
+    form = SubMenuForm()
+    if request.method == 'POST':
+        form = SubMenuForm(request.POST)
+        try:
+            if form.is_valid():
+                form.save()
+                print(f'{form} - Sub menu cadastrado')
+                return redirect('control_panel:sub_menus')
+        except Exception as error:
+            print(f'Erro ao cadastrar sub-menu: {error}')
+            return redirect('control_panel:sub_menus')
+    context = {
+        'form': form,
+    }
+    return render(request, 'pages/sub_menu.html', context)
+
+def edit_sub_menu(request, id):
+    obj = SubMenu.objects.get(id=id)
+    form = SubMenuForm(instance=obj)
+    if request.method == 'POST':
+        form = SubMenuForm(request.POST, instance=obj)
+        try:
+            if form.is_valid():
+                form.save()
+                print(f'{form} - Cadastrado com sucesso')
+                return redirect('control_panel:sub_menus')
+        except Exception as error:
+            print(f'Erro ao cadastrar sub-menu: {error}')
+            return redirect('control_panel:sub_menus')
+    context = {
+        'form': form,
+    }
+    return render(request, 'pages/sub_menu.html', context)
+
+def delete_sub_menu(request, id):
+    try:
+        obj = SubMenu.objects.get(id=id)
+        obj.delete()
+        print(f'{obj} - Deletado com sucesso')
+        return redirect('control_panel:sub_menus')
+    except Exception as error:
+        print(f'Erro ao deletar sub-menu: {error}')
+        return redirect('control_panel:sub_menus')
+
+def sub_sub_menus(request):
+    form = SubSubMenuForm()
+    if request.method == 'POST':
+        form = SubSubMenuForm(request.POST)
+        try:
+            if form.is_valid():
+                form.save()
+                print(f'{form} - Sub-sub-menu cadastrado com sucesso')
+                return redirect('control_panel:sub_sub_menus')
+        except Exception as error:
+            print(f'Erro ao cadastrar sub-sub-menu: {error}')
+            return redirect('control_panel:sub_sub_menus')
+    context = {
+        'form': form,
+    }
+    return render(request, 'pages/sub_sub_menus.html', context)
+
+def edit_ss_menus(request, id):
+    obj = SubSubMenu.objects.get(id=id)
+    form = SubSubMenuForm(instance=obj)
+    if request.method == 'POST':
+        form = SubSubMenuForm(request.POST, instance=obj)
+        try:
+            if form.is_valid():
+                form.save()
+                print(f'{form} - Sub-sub-menu cadastrado com sucesso')
+                return redirect('control_panel:sub_sub_menus')
+        except Exception as error:
+            print(f'Erro ao cadastrar sub-sub-menu: {error}')
+            return redirect('control_panel:sub_sub_menus')
+    context = {
+        'form': form,
+    }
+    return render(request, 'pages/sub_sub_menus.html', context)
+
+def delete_ss_menus(request, id):
+    try:
+        obj = SubSubMenu.objects.get(id=id)
+        obj.delete()
+        print(f'{obj} - Sub-sub-menu deletado com sucesso')
+        return redirect('control_panel:sub_sub_menus')
+    except Exception as error:
+        print(f'Erro ao deletar sub-sub-menu: {error}')
+        return redirect('control_panel:sub_sub_menus')

@@ -28,4 +28,12 @@ urlpatterns = [
     path('edit_main_menu/<int:id>/', views.edit_main_menu, name='edit_main_menus'),
     path('delete_main_menu/<int:id>/', views.delete_main_menu, name='delete_main_menus'),
 
+    path('sub_menus/', views.sub_menus, name='sub_menus'),
+    path('edit_sub_menu/<int:id>/', views.edit_sub_menu, name='edit_sub_menu'),
+    path('delete_sub_menu/<int:id>/', views.delete_sub_menu, name='delete_sub_menu'),
+
+    path('ss_menus/', views.sub_sub_menus, name='sub_sub_menus'),
+    path('edit_ss_menu/<int:id>/', views.edit_ss_menus, name='edit_ss_menu'),
+    path('delete_ss_menu/<int:id>/', views.delete_ss_menus, name='delete_ss_menu'),
+
 ]

@@ -13,19 +13,19 @@ def site_settings(request):
     return context
 
 def menu_settings(request):
-    menu_principal = Menu.objects.all()
-    sub_menu = SubMenu.objects.all()
-    sub_sub_menu = SubSubMenu.objects.all()
+    menu_principal = Menu.objects.all().order_by('nome')
+    sub_menu = SubMenu.objects.all().order_by('nome')
+    sub_sub_menu = SubSubMenu.objects.all().order_by('nome')
 
     if menu_principal.exists() or sub_menu.exists() or sub_sub_menu.exists():
         return {
             'menu_principal': menu_principal,
-            'sub_menu': sub_menu,
-            'sub_sub_menu': sub_sub_menu,
+            'menu_secundario': sub_menu,
+            'menu_terciario': sub_sub_menu,
         }
     else:
         return {
             'menu_principal': None,
-            'sub_menu': None,
-            'sub_sub_menu': None,
+            'menu_secundario': None,
+            'menu_terciario': None,
         }

@@ -54,9 +54,16 @@ class SubSubMenuForm(forms.ModelForm):
     class Meta:
         model = SubSubMenu
         fields = '__all__'
-
+        
         labels = {
+            'nome': 'Nome',
+            'link': 'Link/URL',
+            'sub_menu': 'sub_menu',
+        }
+
+        widgets = {
             'nome': forms.TextInput(attrs={'class':'form-control'}),
             'link': forms.URLInput(attrs={'class':'form-control'}),
             'sub_menu': forms.Select(attrs={'class':'form-select'}),
         }
+

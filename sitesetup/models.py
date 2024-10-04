@@ -11,14 +11,14 @@ class SiteSetup(models.Model):
 
 class Menu(models.Model):
     nome = models.CharField(max_length=255)
-    link = models.URLField(blank=True, null=True, default='http://exemplo.com')
+    link = models.URLField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.nome
 
 class SubMenu(models.Model):
     nome = models.CharField(max_length=255)
-    link = models.URLField(blank=True, null=True, default='http://exemplo.com')
+    link = models.URLField(blank=True, null=True)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='sub_menu')
 
     def __str__(self) -> str:
@@ -26,7 +26,7 @@ class SubMenu(models.Model):
 
 class SubSubMenu(models.Model):
     nome = models.CharField(max_length=255)
-    link = models.URLField(blank=True, null=True, default='http://exemplo.com')
+    link = models.URLField(blank=True, null=True)
     sub_menu = models.ForeignKey(SubMenu, on_delete=models.CASCADE, related_name='sub_sub_menu')
 
     def __str__(self) -> str:
