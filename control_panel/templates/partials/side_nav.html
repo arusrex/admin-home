@@ -9,11 +9,10 @@
                 </a>
                 {% if menu_principal %}
                 {% for menu in menu_principal %}
-                    {% if menu != 'enus' %}
                     <a class="sb-sidenav-menu-heading text-decoration-none" {% if menu.link %}href="{{menu.link}}"{% endif %}>{{menu}}</a>
                     {% if menu.sub_menu.all %}
                     {% for sub in menu.sub_menu.all %}
-                        <a class="nav-link collapsed" {% if sub.link %} href="{{sub.link}}"{% else %}data-bs-toggle="collapse" data-bs-target="#{{sub}}"{% endif %} aria-expanded="false" aria-controls="collapseLayouts">
+                        <a class="nav-link collapsed" {% if sub.link %} href="{{sub.link}}"{% else %}data-bs-toggle="collapse" data-bs-target="#{{sub|slugify}}"{% endif %} aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             {{sub}}
                             {% if sub.sub_sub_menu.all %}
@@ -22,7 +21,7 @@
                         </a>
                         {% if sub.sub_sub_menu %}
                         {% for sub_sub in sub.sub_sub_menu.all %}
-                            <div class="collapse bg-dark-gray" id="{{sub}}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse bg-dark-gray" id="{{sub|slugify}}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{sub_sub.link}}">{{sub_sub}}</a>
                                 </nav>
@@ -31,9 +30,25 @@
                         {% endif %}
                     {% endfor %}
                     {% endif %}
-                    {% endif %}
                 {% endfor %}
                 {% endif %}
+                <div class="sb-sidenav-menu-heading">Configurações</div>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#subMenus" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    Menu
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse bg-dark-gray" id="subMenus" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="{% url "control_panel:main_menus" %}">Bloco de Categorias</a>
+                        <a class="nav-link" href="{% url "control_panel:sub_menus" %}">Categorias</a>
+                        <a class="nav-link" href="{% url "control_panel:sub_sub_menus" %}">Sub-Categorias</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="{% url "control_panel:site_setup" %}" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    Dados da Aplicação
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">
