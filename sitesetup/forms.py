@@ -1,4 +1,4 @@
-from .models import SiteSetup, Menu, SubMenu, SubSubMenu
+from .models import SiteSetup, Menu, SubMenu, SubSubMenu, EmailBackend
 from django import forms
 
 class SiteSetupForm(forms.ModelForm):
@@ -67,3 +67,25 @@ class SubSubMenuForm(forms.ModelForm):
             'sub_menu': forms.Select(attrs={'class':'form-select'}),
         }
 
+class EmailBackendForm(forms.ModelForm):
+    class Meta:
+        model = EmailBackend
+        fields = '__all__'
+
+        labels = {
+            'email_host': 'Servidor SMTP',
+            'email_port': 'Porta SMTP',
+            'email_use_tls': 'Habilita criptografia TLS',
+            'email_host_user': 'Digite o email',
+            'email_host_password': 'Senha do email',
+            'default_from_email': 'O endereço "De" padrão para os e-mails enviados',
+        }
+
+        widgets = {
+            'email_host': forms.TextInput(attrs={'class':'form-control'}),
+            'email_port': forms.NumberInput(attrs={'class':'form-control'}),
+            'email_use_tls': forms.CheckboxInput(attrs={'class':'form-check-input'}),
+            'email_host_user': forms.EmailInput(attrs={'class': 'form-control'}),
+            'email_host_password': forms.PasswordInput(attrs={'class':'form-control'}),
+            'default_from_email': forms.EmailInput(attrs={'class':'form-control'}),
+        }

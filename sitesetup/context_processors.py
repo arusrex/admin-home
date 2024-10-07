@@ -1,5 +1,4 @@
 from .models import *
-from django.utils.text import slugify
 
 def site_settings(request):
     try:

@@ -16,6 +16,17 @@
                     <img id="img-logo" src="{{site_setup.logo.url}}" class="rounded" width="200px" height="200px" alt="Logotipo">
                 </div>
                 {% endif %}
+
+                <form class="form-control p-2" style="max-width: 720px;" method="POST">
+                    {% csrf_token %}
+                    {% for field in form_email_backend %}
+                        <div class="m-2 p-1">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <button name="email_backend_form" type="submit" class="btn btn-primary">Salvar</button>
+                </form>
             </div>
         </div>
     </main>

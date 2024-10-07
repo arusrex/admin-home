@@ -16,11 +16,12 @@ app_name = 'control_panel'
 urlpatterns = [
     path('', views.home, name='home'),
 
-    path('login/', views.login, name='login'),
+    path('login/', views.logar, name='login'),
+    path('logout/', views.deslogar, name='logout'),
 
     path('register/', views.register, name='register'),
 
-    path('password/', views.password, name='password'),
+    path('password/', views.enviar_email_password, name='password'),
 
     path('site_setup/', views.site_setup, name="site_setup"),
 

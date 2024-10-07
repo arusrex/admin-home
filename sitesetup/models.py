@@ -31,3 +31,19 @@ class SubSubMenu(models.Model):
 
     def __str__(self) -> str:
         return self.nome
+    
+class EmailBackend(models.Model):
+    email_host = models.CharField(max_length=255)
+    email_port = models.IntegerField()
+    email_use_tls = models.BooleanField(default=True)
+    email_host_user = models.EmailField()
+    email_host_password = models.CharField(max_length=255)
+    default_from_email = models.EmailField(blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.default_from_email:
+            self.default_from_email = self.email_host_user
+        return super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return 'Configuração de Email Administrativo'
