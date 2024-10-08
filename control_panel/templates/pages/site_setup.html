@@ -16,8 +16,13 @@
                     <img id="img-logo" src="{{site_setup.logo.url}}" class="rounded" width="200px" height="200px" alt="Logotipo">
                 </div>
                 {% endif %}
-
+            </div>
+            <div class="d-flex flex-column mt-4 gap-2">
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">Configurações do Email Administrativo</li>
+                </ol>
                 <form class="form-control p-2" style="max-width: 720px;" method="POST">
+                    <p>Verfique as informações abaixo de acordo com o servidor do email utilizado</p>
                     {% csrf_token %}
                     {% for field in form_email_backend %}
                         <div class="m-2 p-1">

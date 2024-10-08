@@ -30,7 +30,7 @@ var myLineChart = new Chart(ctx, {
           unit: 'date'
         },
         gridLines: {
-          display: false
+          display: true
         },
         ticks: {
           maxTicksLimit: 7
@@ -48,7 +48,7 @@ var myLineChart = new Chart(ctx, {
       }],
     },
     legend: {
-      display: false
+      display: true
     }
   }
 });

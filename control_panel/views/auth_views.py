@@ -4,9 +4,10 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.hashers import check_password
-from django.core.mail import send_mail
 from sitesetup.models import EmailBackend
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 def logar(request):
     try:
@@ -63,41 +64,58 @@ def register(request):
                     )
             
             return redirect('control_panel:login')
+        return render(request, 'pages/register.html')
         
     except Exception as error:
         print(f'Erro ao registrar usuário: {error}')
-        return redirect('control_panel:register')       
-    return render(request, 'pages/register.html')
+        return redirect('control_panel:register')
+    finally:
+        return render(request, 'pages/register.html')
+
 
 def enviar_email_password(request):
     try:
-        email_backend = EmailBackend.objects.last()
-        if not email_backend:
-            print('Email de backend não configurado')
-            return redirect('control_panel:site_setup')
-        
-        email_password = request.POST.get('email', None)
-        if not email_password:
-            print('E-mail não informado para envio')
+        if request.method == 'POST':
+            email_backend = EmailBackend.objects.last()
+
+            if not email_backend:
+                print('Email de backend não configurado')
+                return redirect('control_panel:site_setup')
+            
+            email_password = request.POST.get('email_esquecido', None)
+            if not email_password:
+                print('E-mail não informado para envio')
+                return redirect('control_panel:password')
+            
+            from_email = email_backend.default_from_email
+            subject = 'Recuperação de senha'
+            message_body = 'É necessário a alteração do seu-email, clique no link a seguir para realizar o procedimento'
+            recipient_list = [email_password]
+            smtp_username = email_backend.email_host_user
+            smtp_password = email_backend.email_host_password.strip()
+            smtp_server = email_backend.email_host
+            smtp_port = email_backend.email_port
+            smtp_tls = email_backend.email_use_tls
+
+            # Cria a mensagem MIME
+            message = MIMEMultipart()
+            message['From'] = from_email
+            message['To'] = email_password
+            message['Subject'] = subject
+            message.attach(MIMEText(message_body, 'plain'))
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.ehlo()
+                if smtp_tls:
+                    server.starttls()
+                    server.ehlo()
+                server.login(smtp_username, smtp_password)
+                server.sendmail(from_email, recipient_list, message.as_string())
+                print('Email evnviado com sucesso')
+
+            print('Email evnviado com sucesso')
             return redirect('control_panel:password')
-        
-        from_email = email_backend.default_from_email
-        subject = 'Recuperação de senha'
-        message = 'É necessário a alteração do seu-email, clique no link a seguir para realizar o procedimento'
-        recipient_list = [email_password]
-
-        send_mail(
-            subject,
-            message,
-            from_email,
-            recipient_list,
-            fail_silently=False,
-            connection=None,
-        )
-
-        print('Email evnviado com sucesso')
-        return redirect('control_panel:password')
+        return render(request, 'pages/password.html')
     except Exception as error:
         print(f'Erro ao enviar email de recuperação: {error}')
-
-    return render(request, 'pages/password.html')
+        return redirect('control_panel:password')

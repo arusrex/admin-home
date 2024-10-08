@@ -1,0 +1,58 @@
+{% extends "base/layout-main.html" %}
+{% block content %}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">{{site_setup.nome}}</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Atualização dos Dados</li>
+            </ol>
+            <div class="form-control" style="max-width: 720px;">
+                <form class="row" class="form-control p-2" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-12 my-2">
+                        <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                        <input class="form-control" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" value="{{ form.username.value }}" type="text">
+                    </div>
+                    <div class="col-6 my-2">
+                        <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                        <input class="form-control" name="{{ form.first_name.name }}" id="{{ form.first_name.id_for_label }}" value="{{ form.first_name.value }}" type="text">
+                    </div>
+                    <div class="col-6 my-2">
+                        <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                        <input class="form-control" name="{{ form.last_name.name }}" id="{{ form.last_name.id_for_label }}" value="{{ form.last_name.value }}" type="text">
+                    </div>
+                    <div class="col-12 my-2">
+                        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                        <input class="form-control" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" value="{{ form.email.value }}" type="text">
+                    </div>
+                    <div class="col-12 my-2">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="form-control p-2 my-4" style="max-width: 720px;">
+                <ol class="breadcrumb mb-2">
+                    <li class="breadcrumb-item active">Alteração da senha</li>
+                </ol>
+                <form class="row" method="POST">
+                    {% csrf_token %}
+                    <div class="col-6 my-2">
+                        <label for="#new_password1">Nova Senha</label>
+                        <input class="form-control" name="new_password1" id="new_password1" type="password">
+                    </div>
+                    <div class="col-6 my-2">
+                        <label for="#new_password2">Confirme a Senha</label>
+                        <input class="form-control" name="new_password2" id="new_password2" type="password">
+                    </div>
+                    <div class="col-12 my2">
+                        <button type="submit" class="btn btn-primary" name="password_change">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    {% include "partials/footer.html" %}
+</div>
+{% endblock content %}

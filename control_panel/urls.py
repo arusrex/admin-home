@@ -23,6 +23,9 @@ urlpatterns = [
 
     path('password/', views.enviar_email_password, name='password'),
 
+    # USER DATA
+    path('user_data/', views.user_data, name="user_data"),
+    
     path('site_setup/', views.site_setup, name="site_setup"),
 
     path('main_menus/', views.main_menus, name='main_menus'),

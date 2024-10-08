@@ -33,7 +33,7 @@ def site_setup(request):
             try:
                 if form_site_setup.is_valid():
                     form_site_setup.save()
-                    print(f'{form_site_setup} - Registro salvo com sucesso')
+                    print(f'Registro salvo com sucesso')
                     return redirect('control_panel:site_setup')
             except Exception as error:
                 print(f'Registro não realizado conforme o erro: {error}')
@@ -55,7 +55,7 @@ def main_menus(request):
         try:
             if form.is_valid():
                 form.save()
-                print(f'{form} Registro salvo com sucesso')
+                print(f'Registro salvo com sucesso')
                 return redirect('control_panel:main_menus')
         except Exception as error:
             print(f'Erro ao registrar o menu: {error}')
@@ -74,7 +74,7 @@ def edit_main_menu(request, id):
         try:
             if form.is_valid():
                 form.save()
-                print(f'{form} - Registro salvo com sucesso')
+                print(f'Registro salvo com sucesso')
                 return redirect('control_panel:main_menus')
         except Exception as error:
             print(f'Erro ao salvar o menu: {error}')
@@ -103,7 +103,7 @@ def sub_menus(request):
         try:
             if form.is_valid():
                 form.save()
-                print(f'{form} - Sub menu cadastrado')
+                print(f'Sub menu cadastrado')
                 return redirect('control_panel:sub_menus')
         except Exception as error:
             print(f'Erro ao cadastrar sub-menu: {error}')
@@ -122,7 +122,7 @@ def edit_sub_menu(request, id):
         try:
             if form.is_valid():
                 form.save()
-                print(f'{form} - Cadastrado com sucesso')
+                print(f'Editado com sucesso')
                 return redirect('control_panel:sub_menus')
         except Exception as error:
             print(f'Erro ao cadastrar sub-menu: {error}')
@@ -151,7 +151,7 @@ def sub_sub_menus(request):
         try:
             if form.is_valid():
                 form.save()
-                print(f'{form} - Sub-sub-menu cadastrado com sucesso')
+                print(f'Sub-sub-menu cadastrado com sucesso')
                 return redirect('control_panel:sub_sub_menus')
         except Exception as error:
             print(f'Erro ao cadastrar sub-sub-menu: {error}')
@@ -170,7 +170,7 @@ def edit_ss_menus(request, id):
         try:
             if form.is_valid():
                 form.save()
-                print(f'{form} - Sub-sub-menu cadastrado com sucesso')
+                print(f'Sub-sub-menu editado com sucesso')
                 return redirect('control_panel:sub_sub_menus')
         except Exception as error:
             print(f'Erro ao cadastrar sub-sub-menu: {error}')

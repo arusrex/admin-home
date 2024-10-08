@@ -44,6 +44,3 @@ class EmailBackend(models.Model):
         if not self.default_from_email:
             self.default_from_email = self.email_host_user
         return super().save(*args, **kwargs)
-
-    def __str__(self) -> str:
-        return 'Configuração de Email Administrativo'
