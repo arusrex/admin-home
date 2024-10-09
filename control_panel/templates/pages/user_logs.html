@@ -1,0 +1,63 @@
+{% extends "base/layout-main.html" %}
+{% block content %}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">{{site_setup.nome}}</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Logs/Registro de Atividades</li>
+            </ol>
+            <div class="container-fluid px-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Dados registrados
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    {% if user_logs %}
+                                        <th>Usuário</th>
+                                        <th>Ação</th>
+                                        <th>Data/Hora</th>
+                                        <th>Endereço de IP</th>
+                                        <th>Informações Adicionais</th>
+                                    {% else %}
+                                        <th>Nenhum dado encontrado</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    {% if user_logs %}
+                                        <th>Usuário</th>
+                                        <th>Ação</th>
+                                        <th>Data/Hora</th>
+                                        <th>Endereço de IP</th>
+                                        <th>Informações Adicionais</th>
+                                    {% else %}
+                                        <th>Nenhum dado encontrado</th>
+                                    {% endif %}
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {% for values in user_logs %}
+                                <tr>
+                                    <td>{{values.user}}</td>
+                                    <td>{{values.action}}</td>
+                                    <td>{{values.timestamp}}</td>
+                                    <td>{{values.ip_address|default_if_none:"Sem Dados"}}</td>
+                                    <td>{{values.additional_info|default_if_none:"Sem Dados"}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% include "partials/footer.html" %}
+</div>
+{% endblock content %}

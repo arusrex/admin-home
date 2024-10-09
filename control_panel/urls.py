@@ -25,7 +25,7 @@ urlpatterns = [
 
     # USER DATA
     path('user_data/', views.user_data, name="user_data"),
-    
+    path('user_logs/', views.user_logs, name="user_logs"),
     path('site_setup/', views.site_setup, name="site_setup"),
 
     path('main_menus/', views.main_menus, name='main_menus'),
