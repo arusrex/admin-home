@@ -1,5 +1,6 @@
 from .models import *
 
+
 def site_settings(request):
     try:
         site_setup = SiteSetup.objects.first()
@@ -29,3 +30,12 @@ def menu_settings(request):
             'menu_secundario': None,
             'menu_terciario': None,
         }
+    
+def user_log_activity(user, action, ip_address=None, additional_info=None):
+    UserLogActivity.objects.create(
+        user=user,
+        action=action,
+        ip_address=ip_address,
+        additional_info=additional_info,
+    )
+    print(f'Atividade registrado {action}')

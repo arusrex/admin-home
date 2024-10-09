@@ -8,6 +8,7 @@ from sitesetup.models import EmailBackend
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from sitesetup.context_processors import user_log_activity
 
 def logar(request):
     try:
@@ -17,6 +18,11 @@ def logar(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                user_log_activity(
+                    user,
+                    'Login',
+                    request.META.get('REMOTE_ADDR'),
+                )
                 return redirect('control_panel:home')
             else:
                 return render(request, 'pages/login.html')
@@ -27,7 +33,13 @@ def logar(request):
 
 @login_required
 def deslogar(request):
+    user_data = request.user
     logout(request)
+    user_log_activity(
+        user_data,
+        'Logout',
+        request.META.get('REMOTE_ADDR'),
+    )
     return redirect('control_panel:login')
 
 def register(request):
@@ -62,6 +74,12 @@ def register(request):
                     first_name=first_name,
                     last_name=last_name
                     )
+            
+            user_log_activity(
+                new_user,
+                'Usuário registrado',
+                request.META.get('REMOTE_ADDR'),
+            )
             
             return redirect('control_panel:login')
         return render(request, 'pages/register.html')

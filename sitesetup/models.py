@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class SiteSetup(models.Model):
     
@@ -44,3 +45,13 @@ class EmailBackend(models.Model):
         if not self.default_from_email:
             self.default_from_email = self.email_host_user
         return super().save(*args, **kwargs)
+
+class UserLogActivity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    action = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    additional_info = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.action} - {self.timestamp}' # type: ignore

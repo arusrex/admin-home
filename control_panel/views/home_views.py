@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from sitesetup.models import SiteSetup, Menu, SubMenu, SubSubMenu, EmailBackend
 from sitesetup.forms import SiteSetupForm, MenuForm, SubMenuForm, SubSubMenuForm, EmailBackendForm
 from django.contrib.auth.decorators import login_required
-
+from sitesetup.context_processors import user_log_activity
 
 @login_required
 def home(request):
@@ -10,6 +10,7 @@ def home(request):
 
 @login_required
 def site_setup(request):
+    user_data = request.user
     obj = SiteSetup.objects.first()
     obj_email_backend = EmailBackend.objects.first()
     form_site_setup = SiteSetupForm(instance=obj)
@@ -20,10 +21,21 @@ def site_setup(request):
             try:
                 if form_email_backend.is_valid():
                     form_email_backend.save()
-                    print('Dados de email backenda salvos')
+                    changed_fields = [field for field in form_email_backend.changed_data]
+                    user_log_activity(
+                        user_data,
+                        f'Dados novos de email backend: {changed_fields}',
+                        request.META.get('REMOTE_ADDR'),
+                    )
+                    print('Dados de email backend salvos')
                     return redirect('control_panel:site_setup')
                 else:
                     print('Erro ao salvar os dados do email backend')
+                    user_log_activity(
+                        user_data,
+                        'Error ao salvar dados do email backend',
+                        request.META.get('REMOTE_ADDR'),
+                    )
                 return redirect('control_panel:site_setup')
             except Exception as error:
                 print(f'Erro ao registrar dados de email backend: {error}')
@@ -33,12 +45,17 @@ def site_setup(request):
             try:
                 if form_site_setup.is_valid():
                     form_site_setup.save()
+                    changed_fields = [field for field in form_site_setup.changed_data]
+                    user_log_activity(
+                        user_data,
+                        f'Dados novos do site: {changed_fields}',
+                        request.META.get('REMOTE_ADDR'),
+                    )
                     print(f'Registro salvo com sucesso')
                     return redirect('control_panel:site_setup')
             except Exception as error:
                 print(f'Registro não realizado conforme o erro: {error}')
                 return redirect('control_home:home')
-
     context = {
         'form': form_site_setup,
         'form_email_backend': form_email_backend,
@@ -49,12 +66,18 @@ def site_setup(request):
 
 @login_required
 def main_menus(request):
+    user_data = request.user
     form = MenuForm()
     if request.method == 'POST':
         form = MenuForm(request.POST)
         try:
             if form.is_valid():
                 form.save()
+                user_log_activity(
+                    user_data,
+                    'Menu registrado',
+                    request.META.get('REMOTE_ADDR'),
+                )
                 print(f'Registro salvo com sucesso')
                 return redirect('control_panel:main_menus')
         except Exception as error:
@@ -67,6 +90,7 @@ def main_menus(request):
 
 @login_required
 def edit_main_menu(request, id):
+    user_data = request.user
     obj = Menu.objects.get(id=id)
     form = MenuForm(instance=obj)
     if request.method == 'POST':
@@ -74,6 +98,12 @@ def edit_main_menu(request, id):
         try:
             if form.is_valid():
                 form.save()
+                changed_fields = [field for field in form.changed_data]
+                user_log_activity(
+                    user_data,
+                    f'Menu editado: {changed_fields}',
+                    request.META.get('REMOTE_ADDR'),
+                )
                 print(f'Registro salvo com sucesso')
                 return redirect('control_panel:main_menus')
         except Exception as error:
@@ -86,10 +116,16 @@ def edit_main_menu(request, id):
 
 @login_required
 def delete_main_menu(request, id):
+    user_data = request.user
     try:
         obj = Menu.objects.get(id=id)
-        obj.delete()
-        print(f'{obj} - Menu deletado com sucesso')
+        obj_delete = obj.delete()
+        print(f'{obj_delete} - Menu deletado com sucesso')
+        user_log_activity(
+            user_data,
+            f'Menu deletado: {obj_delete}',
+            request.META.get('REMOTE_ADDR'),
+        )
         return redirect('control_panel:main_menus')
     except Exception as error:
         print(f'Erro ao deletar menu: {error}')
@@ -97,12 +133,18 @@ def delete_main_menu(request, id):
 
 @login_required
 def sub_menus(request):
+    user_data = request.user
     form = SubMenuForm()
     if request.method == 'POST':
         form = SubMenuForm(request.POST)
         try:
             if form.is_valid():
                 form.save()
+                user_log_activity(
+                    user_data,
+                    'Categoria criada',
+                    request.META.get('REMOTE_ADDR'),
+                )
                 print(f'Sub menu cadastrado')
                 return redirect('control_panel:sub_menus')
         except Exception as error:
@@ -115,6 +157,7 @@ def sub_menus(request):
 
 @login_required
 def edit_sub_menu(request, id):
+    user_data = request.user
     obj = SubMenu.objects.get(id=id)
     form = SubMenuForm(instance=obj)
     if request.method == 'POST':
@@ -122,6 +165,12 @@ def edit_sub_menu(request, id):
         try:
             if form.is_valid():
                 form.save()
+                changed_fields = [field for field in form.changed_data]
+                user_log_activity(
+                    user_data,
+                    f'Categoria alterada: {changed_fields}',
+                    request.META.get('REMOTE_ADDR'),
+                )
                 print(f'Editado com sucesso')
                 return redirect('control_panel:sub_menus')
         except Exception as error:
@@ -134,10 +183,16 @@ def edit_sub_menu(request, id):
 
 @login_required
 def delete_sub_menu(request, id):
+    user_data = request.user
     try:
         obj = SubMenu.objects.get(id=id)
-        obj.delete()
-        print(f'{obj} - Deletado com sucesso')
+        obj_delete = obj.delete()
+        print(f'{obj_delete} - Deletado com sucesso')
+        user_log_activity(
+            user_data,
+            f'Categoria deletada: {obj_delete}',
+            request.META.get('REMOTE_ADDR'),
+        )
         return redirect('control_panel:sub_menus')
     except Exception as error:
         print(f'Erro ao deletar sub-menu: {error}')
@@ -145,12 +200,18 @@ def delete_sub_menu(request, id):
 
 @login_required
 def sub_sub_menus(request):
+    user_data = request.user
     form = SubSubMenuForm()
     if request.method == 'POST':
         form = SubSubMenuForm(request.POST)
         try:
             if form.is_valid():
                 form.save()
+                user_log_activity(
+                    user_data,
+                    'Sub-Categoria criada',
+                    request.METS.get('REMOTE_ADDR'),
+                )
                 print(f'Sub-sub-menu cadastrado com sucesso')
                 return redirect('control_panel:sub_sub_menus')
         except Exception as error:
@@ -163,6 +224,7 @@ def sub_sub_menus(request):
 
 @login_required
 def edit_ss_menus(request, id):
+    user_data = request.user
     obj = SubSubMenu.objects.get(id=id)
     form = SubSubMenuForm(instance=obj)
     if request.method == 'POST':
@@ -170,6 +232,12 @@ def edit_ss_menus(request, id):
         try:
             if form.is_valid():
                 form.save()
+                changed_fields = [field for field in form.changed_data]
+                user_log_activity(
+                    user_data,
+                    f'Sub-Categoria editada: {changed_fields}',
+                    request.META.get('REMOTE_ADDR'),
+                )
                 print(f'Sub-sub-menu editado com sucesso')
                 return redirect('control_panel:sub_sub_menus')
         except Exception as error:
@@ -182,10 +250,16 @@ def edit_ss_menus(request, id):
 
 @login_required
 def delete_ss_menus(request, id):
+    user_data = request.user
     try:
         obj = SubSubMenu.objects.get(id=id)
-        obj.delete()
-        print(f'{obj} - Sub-sub-menu deletado com sucesso')
+        obj_delete = obj.delete()
+        print(f'{obj_delete} - Sub-sub-menu deletado com sucesso')
+        user_log_activity(
+            user_data,
+            f'Sub-Categoria deletada: {obj_delete}',
+            request.META.get('REMOTE_ADDR'),
+        )
         return redirect('control_panel:sub_sub_menus')
     except Exception as error:
         print(f'Erro ao deletar sub-sub-menu: {error}')
