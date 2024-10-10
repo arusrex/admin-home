@@ -13,7 +13,7 @@
                     {% if menu.sub_menu.all %}
                     {% for sub in menu.sub_menu.all %}
                         <a class="nav-link collapsed" {% if sub.link %} href="{{sub.link}}"{% else %}data-bs-toggle="collapse" data-bs-target="#{{sub|slugify}}"{% endif %} aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-folder"></i></div>
                             {{sub}}
                             {% if sub.sub_sub_menu.all %}
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -34,7 +34,7 @@
                 {% endif %}
                 <div class="sb-sidenav-menu-heading">Configurações</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#subMenus" aria-expanded="false" aria-controls="collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-bars"></i></div>
                     Menu
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
@@ -46,15 +46,19 @@
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="{% url "control_panel:site_setup" %}" aria-expanded="false" aria-controls="collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-gear"></i></div>
                     Dados da Aplicação
+                </a>
+                <a class="nav-link collapsed" href="{% url "control_panel:backups" %}" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
+                    Backups
                 </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logado como:</div>
-            {{user.get_full_name}}
-            <p>{% now "d/m/Y" %}</p>
+            <div class="small">{{user.get_full_name}}</div>
+            <div class="small"><p>{% now "d/m/Y" %}</p></div>
         </div>
     </nav>
 </div>

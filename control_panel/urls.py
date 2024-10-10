@@ -16,6 +16,10 @@ app_name = 'control_panel'
 urlpatterns = [
     path('', views.home, name='home'),
 
+    path('backups/', views.backups, name='backups'),
+    path('db_backups/', views.db_backup, name="db_backup"),
+    path('db_restore/', views.db_backup_restore, name="db_restore"),
+
     path('login/', views.logar, name='login'),
     path('logout/', views.deslogar, name='logout'),
 

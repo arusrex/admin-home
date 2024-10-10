@@ -3,6 +3,9 @@ from sitesetup.models import SiteSetup, Menu, SubMenu, SubSubMenu, EmailBackend
 from sitesetup.forms import SiteSetupForm, MenuForm, SubMenuForm, SubSubMenuForm, EmailBackendForm
 from django.contrib.auth.decorators import login_required
 from sitesetup.context_processors import user_log_activity
+from django.core.files.storage import default_storage
+import subprocess
+
 
 @login_required
 def home(request):
@@ -264,3 +267,60 @@ def delete_ss_menus(request, id):
     except Exception as error:
         print(f'Erro ao deletar sub-sub-menu: {error}')
         return redirect('control_panel:sub_sub_menus')
+
+def backups(request):
+    return render(request, 'pages/db_backup.html')
+
+def db_backup(request):
+    user_data = request.user
+    op_system = request.GET.get('op_system')
+    try:
+        if op_system == '1':
+            subprocess.call([r'venv/bin/python3', 'manage.py', 'dbbackup'])
+            print(f'Backup realizado com sucesso')
+            user_log_activity(
+                user_data,
+                'Execução de backup do sistema',
+                request.META.get('REMOTE_ADDR'),
+            )
+        else:
+            subprocess.call([r'venv\Scripts\python', 'manage.py', 'dbbackup'])
+            print(f'Backup realizado com sucesso')
+            user_log_activity(
+                user_data,
+                'Execução de backup do sistema',
+                request.META.get('REMOTE_ADDR'),
+            )
+    except Exception as error:
+        print(f'Erro ao realizar backup do sistema: {error}')
+
+    return redirect('control_panel:backups')
+
+def db_backup_restore(request):
+    user_data = request.user
+    op_system = request.GET.get('op_system')
+    if request.method == 'POST' and request.FILES['backup_file']:
+        backup_file = request.FILES['backup_file']
+        try:
+            if op_system == '1':
+                path = default_storage.save('db_backups/' + backup_file.name, backup_file)
+                subprocess.call([r'venv/bin/python3', 'manage.py', 'dbrestore', '--input-filename=' + path])
+                print('Restauração de backup realizada com sucesso')
+                user_log_activity(
+                    user_data,
+                    'Executado restauração de backup',
+                    request.META.get('REMOTE_ADDR'),
+                )
+            else:
+                path = default_storage.save('db_backups/' + backup_file.name, backup_file)
+                subprocess.call([r'venv\Scripts\python', 'manage.py', 'dbrestore', '--input-filename=' + path])
+                print('Restauração de backup realizada com sucesso')
+                user_log_activity(
+                    user_data,
+                    'Executado restauração de backup',
+                    request.META.get('REMOTE_ADDR'),
+                )
+        except Exception as error:
+            print(f'Erro ao realizar restauração de backup: {error}')
+    return redirect('control_panel:backups')
+

@@ -1,0 +1,54 @@
+{% extends "base/layout-main.html" %}
+{% block content %}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">{{site_setup.nome}}</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Backups</li>
+            </ol>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url "control_panel:db_backup" %}" class="form-control p-2" style="max-width: 720px;" method="GET">
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Executar Backup</li>
+                        </ol>
+                        <div class="m-2 p-1">
+                            <label for="#op_system">Selecione o Sistema Operacional do Servidor</label>
+                            <select class="form-select" id="op_system" name="op_system">
+                                <option value="1">Linux</option>
+                                <option value="2">Windows</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <p class="mt-2">O arquivo de backup será salvo no diretório principal de instalação do sistema</p>
+                    </form>
+                </div>
+                
+                <div class="col-12 my-4">
+                    <form action="{% url "control_panel:db_restore" %}" class="form-control p-2" style="max-width: 720px;" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Restaurar Backup</li>
+                        </ol>
+                        <div class="m-2 p-1">
+                            <label for="#op_system">Selecione o Sistema Operacional do Servidor</label>
+                            <select class="form-select" id="op_system" name="op_system">
+                                <option value="1">Linux</option>
+                                <option value="2">Windows</option>
+                            </select>
+                        </div>
+                        <div class="m-2 p-1">
+                            <label for="#backup_file">Arquivo de Backup</label>
+                            <input class="form-control" id="backup_file" name="backup_file" type="file">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% include "partials/footer.html" %}
+</div>
+{% endblock content %}
