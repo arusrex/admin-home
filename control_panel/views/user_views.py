@@ -33,14 +33,9 @@ def user_data(request):
             if form.is_valid():
                 form.save()
                 changed_values = [field for field in form.changed_data]
-                # user_log_activity(
-                # user_data,
-                # f'Novos dados: {form.values()}',
-                # request.META.get('REMOTE_ADDR')
-                # )
                 user_log_activity(
                     user_data,
-                    f'Novos dados: {changed_values}',
+                    f'Dados de usuário: {changed_values}',
                     request.META.get('REMOTE_ADDR')
                     )
                 print('Dados de usuário alterados com sucesso')
