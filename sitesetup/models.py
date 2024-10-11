@@ -6,6 +6,7 @@ class SiteSetup(models.Model):
     nome = models.CharField(max_length=255, default='Administração')
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    favicon = models.ImageField(upload_to='favicon/', blank=True, null=True)
 
     def __str__(self) -> str:
         return self.nome

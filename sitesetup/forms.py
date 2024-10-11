@@ -10,11 +10,13 @@ class SiteSetupForm(forms.ModelForm):
             'nome': 'Nome',
             'logo': 'Logotipo',
             'is_active': 'Publicado',
+            'favicon': 'Ícone do sistema (.png)',
         }
 
         widgets = {
             'nome': forms.TextInput(attrs={'class':'form-control'}),
-            'logo': forms.FileInput(attrs={'class':'form-control form-control-sm'}),
+            'logo': forms.ClearableFileInput(attrs={'class':'form-control form-control-sm'}),
+            'favicon': forms.ClearableFileInput(attrs={'class':'form-control form-control-sm', 'accept':".png"}),
             'is_active': forms.CheckboxInput(attrs={'class':'form-check-input'}),
         }
 

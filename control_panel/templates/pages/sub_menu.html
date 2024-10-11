@@ -14,7 +14,7 @@
                     Manutenção de Sub-Menus/Categorias
                 </div>
                 <div class="card-body">
-                    <table id="dataTable" class="display" style="width: 100%">
+                    <table id="dataTable" class="cell-border hover order-column compact" style="width: 100%">
                         <thead>
                             <tr>
                                 <th>Nome</th>
@@ -24,15 +24,6 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Link/URL</th>
-                                <th>Menus Vinculados</th>
-                                <th>Sub-Menus Vinculados</th>
-                                <th>Ações</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             {% for sub in menu_secundario %}
                                 <tr>

@@ -6,6 +6,11 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>{{site_setup.nome}}</title>
+    {% if site_setup.favicon %}
+        <link rel="shortcut icon" href="{{site_setup.favicon.url}}" type="image/png">
+    {% else %}
+        <link rel="shortcut icon" href="{% static "img/painel-de-controle-icone.png" %}" type="image/png">
+    {% endif %}
     <link href={% static "css/styles.css" %} rel="stylesheet" />
     <link href={% static "css/datatables.css"%} rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
