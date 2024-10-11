@@ -11246,3 +11246,30 @@ body {
 .bg-dark-gray {
   background-color: var(--bs-gray-dark);
 }
+
+
+/* Cabeçalho da tabela */
+table.dataTable thead th {
+  background-color: var(--bs-primary);
+  color: white;
+}
+
+/* Linhas pares */
+/* table.dataTable tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+} */
+
+/* Linhas ímpares */
+/* table.dataTable tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+} */
+
+/* Cor ao passar o mouse */
+/* table.dataTable tbody tr:hover {
+  background-color: #ddd;
+} */
+
+/* Cor das bordas */
+/* table.dataTable {
+  border-color: #ddd;
+} */
