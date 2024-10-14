@@ -9,6 +9,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from sitesetup.context_processors import user_log_activity
+from django.utils.crypto import get_random_string
+
 
 def logar(request):
     try:
@@ -23,6 +25,7 @@ def logar(request):
                     'Login',
                     request.META.get('REMOTE_ADDR'),
                 )
+                print(f'{user.username} logado com sucesso')
                 return redirect('control_panel:home')
             else:
                 return render(request, 'pages/login.html')
@@ -105,9 +108,19 @@ def enviar_email_password(request):
                 print('E-mail não informado para envio')
                 return redirect('control_panel:password')
             
+            user_by_email = User.objects.get(email=email_password)
+            if user_by_email:
+                pass_random = get_random_string(length=8)
+                user_by_email.is_active = True
+                user_by_email.set_password(pass_random)
+                user_by_email.save()
+            else:
+                print('Email não consta na base de dados')
+
+            
             from_email = email_backend.default_from_email
             subject = 'Recuperação de senha'
-            message_body = 'É necessário a alteração do seu-email, clique no link a seguir para realizar o procedimento'
+            message_body = f'Olá {user_by_email.username}, sua nova senha provisória é: {pass_random}, é extremamente recomendável alterar a senha provisória o quanto antes.'
             recipient_list = [email_password]
             smtp_username = email_backend.email_host_user
             smtp_password = email_backend.email_host_password.strip()
@@ -129,10 +142,9 @@ def enviar_email_password(request):
                     server.ehlo()
                 server.login(smtp_username, smtp_password)
                 server.sendmail(from_email, recipient_list, message.as_string())
-                print('Email evnviado com sucesso')
+                print('Email enviado com sucesso')
 
-            print('Email evnviado com sucesso')
-            return redirect('control_panel:password')
+            return redirect('control_panel:login')
         return render(request, 'pages/password.html')
     except Exception as error:
         print(f'Erro ao enviar email de recuperação: {error}')

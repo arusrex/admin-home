@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from sitesetup.models import SiteSetup, Menu, SubMenu, SubSubMenu, EmailBackend
 from sitesetup.forms import SiteSetupForm, MenuForm, SubMenuForm, SubSubMenuForm, EmailBackendForm
 from django.contrib.auth.decorators import login_required
-from sitesetup.context_processors import user_log_activity
+from sitesetup.context_processors import user_log_activity, get_client_ip
 from django.core.files.storage import default_storage
 import subprocess
 
@@ -28,7 +28,7 @@ def site_setup(request):
                     user_log_activity(
                         user_data,
                         f'Dados novos de email backend: {changed_fields}',
-                        request.META.get('REMOTE_ADDR'),
+                        get_client_ip(request)
                     )
                     print('Dados de email backend salvos')
                     return redirect('control_panel:site_setup')
@@ -37,7 +37,7 @@ def site_setup(request):
                     user_log_activity(
                         user_data,
                         'Error ao salvar dados do email backend',
-                        request.META.get('REMOTE_ADDR'),
+                        get_client_ip(request)
                     )
                 return redirect('control_panel:site_setup')
             except Exception as error:
@@ -52,7 +52,7 @@ def site_setup(request):
                     user_log_activity(
                         user_data,
                         f'Dados novos do site: {changed_fields}',
-                        request.META.get('REMOTE_ADDR'),
+                        get_client_ip(request)
                     )
                     print(f'Registro salvo com sucesso')
                     return redirect('control_panel:site_setup')
@@ -79,7 +79,7 @@ def main_menus(request):
                 user_log_activity(
                     user_data,
                     'Menu registrado',
-                    request.META.get('REMOTE_ADDR'),
+                    get_client_ip(request)
                 )
                 print(f'Registro salvo com sucesso')
                 return redirect('control_panel:main_menus')
@@ -105,7 +105,7 @@ def edit_main_menu(request, id):
                 user_log_activity(
                     user_data,
                     f'Menu editado: {changed_fields}',
-                    request.META.get('REMOTE_ADDR'),
+                    get_client_ip(request)
                 )
                 print(f'Registro salvo com sucesso')
                 return redirect('control_panel:main_menus')
@@ -127,7 +127,7 @@ def delete_main_menu(request, id):
         user_log_activity(
             user_data,
             f'Menu deletado: {obj_delete}',
-            request.META.get('REMOTE_ADDR'),
+            get_client_ip(request)
         )
         return redirect('control_panel:main_menus')
     except Exception as error:
@@ -146,7 +146,7 @@ def sub_menus(request):
                 user_log_activity(
                     user_data,
                     'Categoria criada',
-                    request.META.get('REMOTE_ADDR'),
+                    get_client_ip(request)
                 )
                 print(f'Sub menu cadastrado')
                 return redirect('control_panel:sub_menus')
@@ -172,7 +172,7 @@ def edit_sub_menu(request, id):
                 user_log_activity(
                     user_data,
                     f'Categoria alterada: {changed_fields}',
-                    request.META.get('REMOTE_ADDR'),
+                    get_client_ip(request)
                 )
                 print(f'Editado com sucesso')
                 return redirect('control_panel:sub_menus')
@@ -194,7 +194,7 @@ def delete_sub_menu(request, id):
         user_log_activity(
             user_data,
             f'Categoria deletada: {obj_delete}',
-            request.META.get('REMOTE_ADDR'),
+            get_client_ip(request)
         )
         return redirect('control_panel:sub_menus')
     except Exception as error:
@@ -239,7 +239,7 @@ def edit_ss_menus(request, id):
                 user_log_activity(
                     user_data,
                     f'Sub-Categoria editada: {changed_fields}',
-                    request.META.get('REMOTE_ADDR'),
+                    get_client_ip(request)
                 )
                 print(f'Sub-sub-menu editado com sucesso')
                 return redirect('control_panel:sub_sub_menus')
@@ -261,7 +261,7 @@ def delete_ss_menus(request, id):
         user_log_activity(
             user_data,
             f'Sub-Categoria deletada: {obj_delete}',
-            request.META.get('REMOTE_ADDR'),
+            get_client_ip(request)
         )
         return redirect('control_panel:sub_sub_menus')
     except Exception as error:
@@ -281,7 +281,7 @@ def db_backup(request):
             user_log_activity(
                 user_data,
                 'Execução de backup do sistema',
-                request.META.get('REMOTE_ADDR'),
+                get_client_ip(request)
             )
         else:
             subprocess.call([r'venv\Scripts\python', 'manage.py', 'dbbackup'])
@@ -289,7 +289,7 @@ def db_backup(request):
             user_log_activity(
                 user_data,
                 'Execução de backup do sistema',
-                request.META.get('REMOTE_ADDR'),
+                get_client_ip(request)
             )
     except Exception as error:
         print(f'Erro ao realizar backup do sistema: {error}')
@@ -309,7 +309,7 @@ def db_backup_restore(request):
                 user_log_activity(
                     user_data,
                     'Executado restauração de backup',
-                    request.META.get('REMOTE_ADDR'),
+                    get_client_ip(request)
                 )
             else:
                 path = default_storage.save('db_backups/' + backup_file.name, backup_file)
@@ -318,7 +318,7 @@ def db_backup_restore(request):
                 user_log_activity(
                     user_data,
                     'Executado restauração de backup',
-                    request.META.get('REMOTE_ADDR'),
+                    get_client_ip(request)
                 )
         except Exception as error:
             print(f'Erro ao realizar restauração de backup: {error}')

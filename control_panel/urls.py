@@ -32,6 +32,9 @@ urlpatterns = [
     path('user_logs/', views.user_logs, name="user_logs"),
     path('site_setup/', views.site_setup, name="site_setup"),
 
+    # USERS
+    path('users/', views.users, name="users"),
+
     path('main_menus/', views.main_menus, name='main_menus'),
     path('edit_main_menu/<int:id>/', views.edit_main_menu, name='edit_main_menus'),
     path('delete_main_menu/<int:id>/', views.delete_main_menu, name='delete_main_menus'),

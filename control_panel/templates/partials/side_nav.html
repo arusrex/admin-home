@@ -49,6 +49,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-gear"></i></div>
                     Dados da Aplicação
                 </a>
+                {% if user.is_superuser or user.is_staff %}
+                <a class="nav-link collapsed" href="{% url "control_panel:users" %}" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                    Usuários
+                </a>
+                {% endif %}
                 <a class="nav-link collapsed" href="{% url "control_panel:backups" %}" aria-expanded="false" aria-controls="collapseLayouts">
                     <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
                     Backups

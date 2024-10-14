@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from control_panel.forms import CustomUserUpdateForm
 from sitesetup.context_processors import user_log_activity
+from django.contrib.auth.models import User
+from sitesetup.context_processors import get_client_ip
 
 
 @login_required
@@ -17,14 +19,14 @@ def user_data(request):
                 user_log_activity(
                     user_data,
                     'Alterou sua senha',
-                    request.META.get('REMOTE_ADDR')
+                    get_client_ip(request)
                     )
                 return password_change(request, user_data, new_password1)
             else:
                 user_log_activity(
                     user_data,
                     'Senha diferentes ao alterar',
-                    request.META.get('REMOTE_ADDR')
+                    get_client_ip(request)
                     )
                 print(f'Senhas incomaptíveis: {new_password1} é diferente de {new_password2}')
                 return redirect('control_panel:user_data')
@@ -36,7 +38,7 @@ def user_data(request):
                 user_log_activity(
                     user_data,
                     f'Dados de usuário: {changed_values}',
-                    request.META.get('REMOTE_ADDR')
+                    get_client_ip(request)
                     )
                 print('Dados de usuário alterados com sucesso')
                 return redirect('control_panel:user_data')
@@ -44,7 +46,7 @@ def user_data(request):
                 user_log_activity(
                     user_data,
                     f'Erro nos dados de usuário',
-                    request.META.get('REMOTE_ADDR')
+                    get_client_ip(request)
                     )
                 print(f'Erro ao salvar os dados de usuário: {form.errors}')
                 return redirect('control_panel:user_data')
@@ -59,3 +61,13 @@ def password_change(request, user_data, new_password):
     user_data.save()
     logout(request)
     return redirect('control_panel:login')
+
+
+def users(request):
+    users = User.objects.all().order_by('first_name')
+
+    context = {
+        'data_table': users,
+    }
+
+    return render(request, 'pages/users.html', context)
