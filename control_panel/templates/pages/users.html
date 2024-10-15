@@ -7,8 +7,61 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Usuários</li>
             </ol>
-            <div class="row">
-                
+            <div class="form-control my-2" style="max-width: 720px;">
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">Registro de Usuários</li>
+                </ol>
+                <form class="row my-2" method="POST">
+                    {% csrf_token %}
+                    <div class="col-sm-6">
+                        {{form.username.errors}}
+                        {{form.username.label_tag}}
+                        {{form.username}}
+                    </div>
+                    <div class="col-sm-6">
+                        {{form.first_name.errors}}
+                        {{form.first_name.label_tag}}
+                        {{form.first_name}}
+                    </div>
+                    <div class="col-sm-6">
+                        {{form.last_name.errors}}
+                        {{form.last_name.label_tag}}
+                        {{form.last_name}}
+                    </div>
+                    <div class="col-sm-6">
+                        {{form.email.errors}}
+                        {{form.email.label_tag}}
+                        {{form.email}}
+                    </div>
+                    <div class="col-sm-6">
+                        {{form.password1.errors}}
+                        {{form.password1.label_tag}}
+                        <input type="password" class="form-control" name="password1" id="id_password1">
+                    </div>
+                    <div class="col-sm-6">
+                        {{form.password2.errors}}
+                        {{form.password2.label_tag}}
+                        <input type="password2" class="form-control" name="password2" id="id_password2">
+                    </div>
+                    <div class="col-sm-4">
+                        {{form.is_active.errors}}
+                        {{form.is_active.label_tag}}
+                        {{form.is_active}}
+                    </div>
+                    <div class="col-sm-4">
+                        {{form.is_staff.errors}}
+                        {{form.is_staff.label_tag}}
+                        {{form.is_staff}}
+                    </div>
+                    <div class="col-sm-4">
+                        {{form.is_superuser.errors}}
+                        {{form.is_superuser.label_tag}}
+                        {{form.is_superuser}}
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                    </div>
+                </form>
             </div>
             <div class="card mb-4 card-div-dark">
                 <div class="card-header card-div-dark">
@@ -28,6 +81,7 @@
                                 <th>Administrador?</th>
                                 <th>Último Login</th>
                                 <th>Criado em</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -41,6 +95,7 @@
                                 <th>Administrador?</th>
                                 <th>Último Login</th>
                                 <th>Criado em</th>
+                                <th>Ações</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -55,6 +110,10 @@
                                     <td>{% if value.is_superuser is True %}Sim{% else %}Não{% endif %}</td>
                                     <td>{{value.last_login}}</td>
                                     <td>{{value.date_joined}}</td>
+                                    <td>
+                                        <a href="{% url "control_panel:edit_user" value.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="{% url "control_panel:delete_user" value.id %}"><i class="fa-solid fa-trash"></i></a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

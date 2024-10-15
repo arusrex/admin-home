@@ -8,7 +8,7 @@
                 <li class="breadcrumb-item active">Atualização dos Dados</li>
             </ol>
             <div class="form-control" style="max-width: 720px;">
-                <form class="row" class="form-control p-2" method="POST" enctype="multipart/form-data">
+                <form class="row p-2" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="col-12 my-2">
                         <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>

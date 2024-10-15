@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from control_panel.forms import CustomUserUpdateForm
+from control_panel.forms import CustomUserUpdateForm, InsertNewUserForm
 from sitesetup.context_processors import user_log_activity
 from django.contrib.auth.models import User
 from sitesetup.context_processors import get_client_ip
@@ -64,10 +64,95 @@ def password_change(request, user_data, new_password):
 
 
 def users(request):
+    user_data = request.user
     users = User.objects.all().order_by('first_name')
+    if request.method == 'POST':
+        form = InsertNewUserForm(request.POST)
+        email_exists = request.POST.get('email')
+        user_exists = request.POST.get('username')
+        try:
+            if User.objects.filter(email=email_exists).exists() or User.objects.filter(username=user_exists).exists:
+                print(f'Email ou Nome de Usuário já registrado')
+            else:
+                if form.is_valid():
+                    form.save()
+                    user_log_activity(
+                        user_data,
+                        'Novo usuário registrado',
+                        get_client_ip(request),
+                    )
+                    print('Novo usuário criado com sucesso')
+                    return redirect('control_panel:users')
+            
+        except Exception as error:
+            print(f'Erro ao criar usuário: {error}')
+        
+    form = InsertNewUserForm()
 
     context = {
         'data_table': users,
+        'form': form,
     }
 
     return render(request, 'pages/users.html', context)
+
+def edit_user(request, id):
+    user_data = request.user
+    user_obj = User.objects.get(id=id)
+    users = User.objects.all().order_by('first_name')
+
+    if request.method == 'POST':
+        form = InsertNewUserForm(request.POST, instance=user_obj)
+        new_password1 = request.POST.get('password1')
+        new_password2 = request.POST.get('password2')
+
+        if new_password1 or new_password2:
+            if new_password1 != new_password2:
+                print('Senha não coincidem')
+            else:
+                user_obj.set_password(new_password1)
+                user_log_activity(
+                    user_data,
+                    f'Senha de usuário {user_obj} alterada',
+                    get_client_ip(request),
+                )
+                print(f'Senha de usuário {user_obj} alterada')
+        else:
+            print('Nenhuma senha fornecida, será mantida a senha atual')
+
+        if form.is_valid():
+            form.save()
+            user_log_activity(
+                user_data,
+                'Usuário editado',
+                get_client_ip(request),
+            )
+            print('Usuário editado com sucesso')
+            return redirect('control_panel:users')
+        else:
+            print('Erro de validação de formulário de edição do usuário')
+    else:
+        form = InsertNewUserForm(instance=user_obj)
+
+    context = {
+        'data_table': users,
+        'form': form,
+    }
+
+    return render(request, 'pages/users.html', context)
+
+def delete_user(request, id):
+    user_data = request.user
+    user_obj = User.objects.get(id=id)
+    try:
+        user_obj.delete()
+        user_log_activity(
+            user_data,
+            f'Usuário {user_obj} deletado',
+            get_client_ip(request),
+        )
+        print(f'Usuário {user_obj} deletado')
+    except Exception as error:
+        print(f'Erro ao deletar {user_obj}: {error}')
+    return redirect('control_panel:users')
+    
