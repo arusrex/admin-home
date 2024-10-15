@@ -11254,6 +11254,28 @@ table.dataTable thead th {
   color: white;
 }
 
+.table-dark {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+}
+
+.table-dark.dataTable tbody tr,
+.table-dark.dataTable tbody td {
+  border-color: var(--bs-light);
+}
+
+.card-dark {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+  border-color: var(--bs-light) !important;
+}
+
+.card-secondary {
+  background-color: var(--bs-secondary);
+  color: var(--bs-light);
+  border-color: var(--bs-light) !important;
+}
+
 /* Linhas pares */
 /* table.dataTable tbody tr:nth-child(even) {
   background-color: #f2f2f2;

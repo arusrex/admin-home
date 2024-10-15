@@ -21,27 +21,10 @@
                 <li><a class="dropdown-item" href="{% url "control_panel:logout" %}">Sair</a></li>
             </ul>
         </li>
-        <li><button class="btn btn-dark" id="toggle-dark-mode"><i class="fa-solid fa-circle-half-stroke"></i></button></li>
+        <li><button class="btn btn-dark text-secondary" id="toggle-dark-mode"><i class="fa-solid fa-circle-half-stroke"></i></button></li>
     </ul>
 </nav>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggleButton = document.getElementById('toggle-dark-mode');
-
-        if (localStorage.getItem('dark-mode') === 'enabled') {
-            document.body.classList.add('bg-dark', 'text-secondary');
-        };
-
-        toggleButton.addEventListener('click', () => {
-            document.body.classList.toggle('bg-dark');
-            document.body.classList.toggle('text-secondary');
-
-            if (document.body.classList.contains('bg-dark')) {
-                localStorage.setItem('dark-mode', 'enabled');
-            } else {
-                localStorage.setItem('dark-mode', 'disabled');
-            };
-        });
-    });
+    
 </script>

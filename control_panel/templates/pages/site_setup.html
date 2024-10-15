@@ -28,7 +28,7 @@
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Configurações do Email Administrativo</li>
                 </ol>
-                <form class="form-control p-2" style="max-width: 720px;" method="POST">
+                <form class="form-control p-2 mb-2" style="max-width: 720px;" method="POST">
                     <p>Verfique as informações abaixo de acordo com o servidor do email utilizado</p>
                     {% csrf_token %}
                     {% for field in form_email_backend %}
