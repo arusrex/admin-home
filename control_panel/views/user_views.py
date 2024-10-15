@@ -71,7 +71,7 @@ def users(request):
         email_exists = request.POST.get('email')
         user_exists = request.POST.get('username')
         try:
-            if User.objects.filter(email=email_exists).exists() or User.objects.filter(username=user_exists).exists:
+            if User.objects.filter(email=email_exists).exists() or User.objects.filter(username=user_exists).exists():
                 print(f'Email ou Nome de Usuário já registrado')
             else:
                 if form.is_valid():
@@ -102,14 +102,12 @@ def edit_user(request, id):
     users = User.objects.all().order_by('first_name')
 
     if request.method == 'POST':
+        print(request.POST)
         form = InsertNewUserForm(request.POST, instance=user_obj)
-        new_password1 = request.POST.get('password1')
-        new_password2 = request.POST.get('password2')
-
-        if new_password1 or new_password2:
-            if new_password1 != new_password2:
-                print('Senha não coincidem')
-            else:
+        
+        if form.is_valid():
+            new_password1 = form.cleaned_data.get('password1')
+            if new_password1:
                 user_obj.set_password(new_password1)
                 user_log_activity(
                     user_data,
@@ -117,10 +115,7 @@ def edit_user(request, id):
                     get_client_ip(request),
                 )
                 print(f'Senha de usuário {user_obj} alterada')
-        else:
-            print('Nenhuma senha fornecida, será mantida a senha atual')
 
-        if form.is_valid():
             form.save()
             user_log_activity(
                 user_data,
