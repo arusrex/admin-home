@@ -129,26 +129,31 @@ def edit_user(request, id):
         form = InsertNewUserForm(request.POST, instance=user_obj)
         
         if form.is_valid():
-            new_password1 = form.cleaned_data.get('password1')
+            new_password1 = request.POST.get('password1')
+            new_password2 = request.POST.get('password2')
             if new_password1:
-                user_obj.set_password(new_password1)
+                if new_password1 != new_password2:
+                    print('Senhas não coincidem')
+                else:
+                    form.save(commit=False)
+                    user_obj.set_password(new_password1)
+                    user_obj.save()
+                    user_log_activity(
+                        user_data,
+                        f'Senha de usuário ({user_obj}) alterada',
+                        get_client_ip(request),
+                    )
+                    print(f'Senha de usuário {user_obj} alterada')
+            else:
+                form.save()
                 user_log_activity(
                     user_data,
-                    f'Senha de usuário ({user_obj}) alterada',
+                    f'Usuário ({user_obj}) editado',
                     get_client_ip(request),
                 )
-                print(f'Senha de usuário {user_obj} alterada')
-        else:
-            print('Nenhuma senha fornecida, será mantida a senha atual')
+                print('Usuário editado com sucesso')
+                return redirect('control_panel:users')
 
-            form.save()
-            user_log_activity(
-                user_data,
-                f'Usuário ({user_obj}) editado',
-                get_client_ip(request),
-            )
-            print('Usuário editado com sucesso')
-            return redirect('control_panel:users')
     else:
         form = InsertNewUserForm(instance=user_obj)
 

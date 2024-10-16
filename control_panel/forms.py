@@ -59,19 +59,19 @@ class InsertNewUserForm(forms.ModelForm):
             'is_superuser': forms.CheckboxInput(attrs={'class':'form-check-input'}),
         }
 
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exclude(id=self.instance.id).exists():
-            raise forms.ValidationError('Este nome de usuário já está em uso')
-        return username
+    # def clean_username(self):
+    #     username = self.cleaned_data['username']
+    #     if User.objects.filter(username=username).exclude(id=self.instance.id).exists():
+    #         raise forms.ValidationError('Este nome de usuário já está em uso')
+    #     return username
     
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get('password1')
-        password2 = cleaned_data.get('password2')
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     password1 = cleaned_data.get('password1')
+    #     password2 = cleaned_data.get('password2')
 
-        if password1 or password2:
-            if password1 != password2:
-                raise ValidationError("As senhas não coincidem.")
+    #     if password1 or password2:
+    #         if password1 != password2:
+    #             raise ValidationError("As senhas não coincidem.")
             
-        return cleaned_data
+    #     return cleaned_data
