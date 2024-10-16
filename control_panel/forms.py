@@ -20,10 +20,10 @@ class CustomUserUpdateForm(forms.ModelForm):
             'email':forms.EmailInput(attrs={'class':'form-control'}),
         }
 
-class InsertNewUserForm(UserCreationForm):
+class InsertNewUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_active', 'is_staff', 'is_superuser']
 
         # password1 = forms.CharField(
         # label="Senha",

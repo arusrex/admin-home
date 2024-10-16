@@ -11261,7 +11261,7 @@ table.dataTable thead th {
 
 .table-dark.dataTable tbody tr,
 .table-dark.dataTable tbody td {
-  border-color: var(--bs-light);
+  border-color: var(--bs-light) !important;
 }
 
 .card-dark {

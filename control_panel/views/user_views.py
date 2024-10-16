@@ -68,21 +68,44 @@ def users(request):
     users = User.objects.all().order_by('first_name')
     if request.method == 'POST':
         form = InsertNewUserForm(request.POST)
-        email_exists = request.POST.get('email')
-        user_exists = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        is_active = request.POST.get('is_active') == 'on'
+        is_staff = request.POST.get('is_staff') == 'on'
+        is_superuser = request.POST.get('is_superuser') == 'on'
+        email = request.POST.get('email')
+        user = request.POST.get('username')
+        new_password1 = request.POST.get('password1')
+        new_password2 = request.POST.get('password2')
+
+        print(request.POST)
+
         try:
-            if User.objects.filter(email=email_exists).exists() or User.objects.filter(username=user_exists).exists:
+            if User.objects.filter(email=email).exists() or User.objects.filter(username=user).exists():
                 print(f'Email ou Nome de Usuário já registrado')
             else:
                 if form.is_valid():
-                    form.save()
-                    user_log_activity(
-                        user_data,
-                        'Novo usuário registrado',
-                        get_client_ip(request),
-                    )
-                    print('Novo usuário criado com sucesso')
-                    return redirect('control_panel:users')
+                    if new_password1 != new_password2:
+                        print('Senhas não coincidem')
+                    else:
+                        new_user = User.objects.create(
+                            username=user,
+                            first_name=first_name,
+                            last_name=last_name,
+                            email=email,
+                            is_active=is_active,
+                            is_staff=is_staff,
+                            is_superuser=is_superuser,
+                            )
+                        new_user.set_password(new_password1)
+                        new_user.save()
+                        user_log_activity(
+                            user_data,
+                            f'Novo usuário ({new_user.username}) registrado',
+                            get_client_ip(request),
+                        )
+                        print('Novo usuário criado com sucesso')
+                        return redirect('control_panel:users')
             
         except Exception as error:
             print(f'Erro ao criar usuário: {error}')
@@ -113,10 +136,10 @@ def edit_user(request, id):
                 user_obj.set_password(new_password1)
                 user_log_activity(
                     user_data,
-                    f'Senha de usuário {user_obj} alterada',
+                    f'Senha de usuário ({user_obj}) alterada',
                     get_client_ip(request),
                 )
-                print(f'Senha de usuário {user_obj} alterada')
+                print(f'Senha de usuário ({user_obj}) alterada')
         else:
             print('Nenhuma senha fornecida, será mantida a senha atual')
 
@@ -124,7 +147,7 @@ def edit_user(request, id):
             form.save()
             user_log_activity(
                 user_data,
-                'Usuário editado',
+                f'Usuário ({user_obj}) editado',
                 get_client_ip(request),
             )
             print('Usuário editado com sucesso')
