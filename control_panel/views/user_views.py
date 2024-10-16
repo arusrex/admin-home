@@ -81,7 +81,7 @@ def users(request):
         print(request.POST)
 
         try:
-            if User.objects.filter(email=email_exists).exists() or User.objects.filter(username=user_exists).exists:
+            if User.objects.filter(email=email).exists() or User.objects.filter(username=user).exists():
                 print(f'Email ou Nome de Usuário já registrado')
             else:
                 if form.is_valid():
@@ -149,8 +149,6 @@ def edit_user(request, id):
             )
             print('Usuário editado com sucesso')
             return redirect('control_panel:users')
-        else:
-            print('Erro de validação de formulário de edição do usuário')
     else:
         form = InsertNewUserForm(instance=user_obj)
 
