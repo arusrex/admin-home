@@ -79,3 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };    
 });
 
+function clock () {
+    const divSmall = document.querySelector('.timeClock');
+    const data = new Date();
+
+    opcoes = {
+        timeStyle: 'medium',
+    }
+
+    divSmall.innerHTML = data.toLocaleTimeString(opcoes);
+    divSmall.classList.add('small');
+}
+setInterval(clock, 1000);
+

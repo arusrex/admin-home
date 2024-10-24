@@ -2,6 +2,7 @@
 {% load static %}
 <html lang="pt-BR">
     {% include "partials/head.html" %}
+    {% block head %}{% endblock head %}
     <body class="sb-nav-fixed">
         {% include "partials/header.html" %}
         <div id="layoutSidenav">
@@ -9,5 +10,6 @@
             {% block content %}{% endblock content %}
         </div>
         {% include "partials/scripts.html" %}
+        {% block scripts %}{% endblock scripts %}
     </body>
 </html>
