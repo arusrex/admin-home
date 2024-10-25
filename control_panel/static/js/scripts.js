@@ -95,7 +95,11 @@ setInterval(clock, 1000);
 
 // GERAR PDF COM HTML
 
-document.getElementById('imprimir').addEventListener ('click', imprimir);
+// document.getElementById('imprimir').addEventListener ('click', imprimir);
+
+// window.document.addEventListener('DOMContentLoaded', () => {
+//     setTimeout(imprimir, 3000);
+// })
 
 function imprimir () {
     var pagePrint = document.getElementById('main-print');
