@@ -92,3 +92,19 @@ function clock () {
 }
 setInterval(clock, 1000);
 
+
+// GERAR PDF COM HTML
+
+document.getElementById('imprimir').addEventListener ('click', imprimir);
+
+function imprimir () {
+    var pagePrint = document.getElementById('main-print');
+    var options = {
+        filename: `${title}.pdf`,
+        image: {type: 'jpeg', quality: 0.98,},
+        html2canvas: {scale: 2,},
+        jsPDF: {unit: 'in', format: 'letter', orientation: 'portrait',},
+    };
+    html2pdf().from(pagePrint).set(options).save();
+}
+
