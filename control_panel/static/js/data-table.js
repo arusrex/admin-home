@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', event => {
                 processing: 'Processando...',
             },
             layout: {
-                topStart: 'buttons',
+                top2Start: 'buttons',
             },
             buttons: [{
                 extend:'copy', text:'Copiar dados',

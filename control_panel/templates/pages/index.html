@@ -1,7 +1,7 @@
 {% extends "base/layout-main.html" %}
 {% block content %}
 <div id="layoutSidenav_content">
-    <main>
+    <main id="main-print">
         <div class="container-fluid px-4">
             <h1 class="mt-4">{{site_setup.nome}}</h1>
             <ol class="breadcrumb mb-4">
@@ -54,4 +54,7 @@
     </main>
     {% include "partials/footer.html" %}
 </div>
+<script>
+    const title = '{{site_setup.nome}}';
+</script>
 {% endblock content %}
