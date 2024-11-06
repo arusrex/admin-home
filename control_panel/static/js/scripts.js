@@ -111,4 +111,3 @@ function imprimir () {
     };
     html2pdf().from(pagePrint).set(options).save();
 }
-

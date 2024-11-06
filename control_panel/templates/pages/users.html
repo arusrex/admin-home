@@ -110,7 +110,8 @@
                                     <td>{{value.date_joined}}</td>
                                     <td>
                                         <a href="{% url "control_panel:edit_user" value.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="{% url "control_panel:delete_user" value.id %}"><i class="fa-solid fa-trash"></i></a>
+                                        {% comment %} <a href="{% url "control_panel:delete_user" value.id %}"><i class="fa-solid fa-trash"></i></a> {% endcomment %}
+                                        <a class="deleteUser" data-id="{{value.id}}"  href="{% url "control_panel:delete_user" value.id %}"><i class="fa-solid fa-trash"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -5,7 +5,7 @@ from control_panel.forms import CustomUserUpdateForm, InsertNewUserForm
 from sitesetup.context_processors import user_log_activity
 from django.contrib.auth.models import User
 from sitesetup.context_processors import get_client_ip
-
+from django.contrib import messages
 
 @login_required
 def user_data(request):
@@ -21,6 +21,7 @@ def user_data(request):
                     'Alterou sua senha',
                     get_client_ip(request)
                     )
+                messages.success(request, "Senha alterada !")
                 return password_change(request, user_data, new_password1)
             else:
                 user_log_activity(
@@ -28,7 +29,8 @@ def user_data(request):
                     'Senha diferentes ao alterar',
                     get_client_ip(request)
                     )
-                print(f'Senhas incomaptíveis: {new_password1} é diferente de {new_password2}')
+                messages.error(request, "Senhas incomaptíveis !")
+                print(f'Senhas incomaptíveis !')
                 return redirect('control_panel:user_data')
         else:
             form = CustomUserUpdateForm(request.POST, instance=user_data)
@@ -40,6 +42,7 @@ def user_data(request):
                     f'Dados de usuário: {changed_values}',
                     get_client_ip(request)
                     )
+                messages.success(request, "Dados de usuário alterados com sucesso")
                 print('Dados de usuário alterados com sucesso')
                 return redirect('control_panel:user_data')
             else:
@@ -48,6 +51,7 @@ def user_data(request):
                     f'Erro nos dados de usuário',
                     get_client_ip(request)
                     )
+                messages.error(request, 'Erro ao salvar os dados de usuário')
                 print(f'Erro ao salvar os dados de usuário: {form.errors}')
                 return redirect('control_panel:user_data')
 
@@ -62,7 +66,7 @@ def password_change(request, user_data, new_password):
     logout(request)
     return redirect('control_panel:login')
 
-
+@login_required
 def users(request):
     user_data = request.user
     users = User.objects.all().order_by('first_name')
@@ -104,10 +108,12 @@ def users(request):
                             f'Novo usuário ({new_user.username}) registrado',
                             get_client_ip(request),
                         )
+                        messages.success(request, 'Novo usuário criado com sucesso')
                         print('Novo usuário criado com sucesso')
                         return redirect('control_panel:users')
             
         except Exception as error:
+            messages.error(request, 'Erro ao criar usuário')
             print(f'Erro ao criar usuário: {error}')
         
     form = InsertNewUserForm()
@@ -119,6 +125,7 @@ def users(request):
 
     return render(request, 'pages/users.html', context)
 
+@login_required
 def edit_user(request, id):
     user_data = request.user
     user_obj = User.objects.get(id=id)
@@ -143,6 +150,7 @@ def edit_user(request, id):
                         f'Senha de usuário ({user_obj}) alterada',
                         get_client_ip(request),
                     )
+                    messages.success(request, f'Senha de usuário {user_obj} alterada')
                     print(f'Senha de usuário {user_obj} alterada')
             else:
                 form.save()
@@ -151,6 +159,7 @@ def edit_user(request, id):
                     f'Usuário ({user_obj}) editado',
                     get_client_ip(request),
                 )
+                messages.success(request, 'Usuário editado com sucesso')
                 print('Usuário editado com sucesso')
                 return redirect('control_panel:users')
 
@@ -164,6 +173,7 @@ def edit_user(request, id):
 
     return render(request, 'pages/users.html', context)
 
+@login_required
 def delete_user(request, id):
     user_data = request.user
     user_obj = User.objects.get(id=id)
@@ -174,8 +184,10 @@ def delete_user(request, id):
             f'Usuário {user_obj} deletado',
             get_client_ip(request),
         )
+        messages.success(request, f'Usuário {user_obj} deletado')
         print(f'Usuário {user_obj} deletado')
     except Exception as error:
+        messages.error(request, f'Erro ao deletar {user_obj}: {error}')
         print(f'Erro ao deletar {user_obj}: {error}')
     return redirect('control_panel:users')
     
