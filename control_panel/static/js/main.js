@@ -45,20 +45,16 @@ function excluirRegistro (deleteButton) {
     }
 };
 
-function removeBackdropMessages (messages) {
-    console.log(messages);
-    if (messages) {
-        document.body.classList.remove('back-drop');
-        messages.remove();
-    }
+function removeBackdropMessages () {
+    console.log('Chegou no remove back-drop');
+    document.querySelector('.messages').remove();
+    document.body.classList.remove('back-drop');
 };
 
 function pageLoader (messages) {
     if (messages) {
-        window.document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.add('back-drop');
-            setTimeout(removeBackdropMessages(messages), 2000);
-        });
+        document.body.classList.add('back-drop');
+        setTimeout(removeBackdropMessages, 3000);
     } else {
         const divLoader = document.createElement('div');
         const spinner = document.createElement('span');
@@ -94,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (messages) {
             pageLoader(messages);
         } else {
-            setTimeout(pageLoader(), 1000);
+            pageLoader();
         }
     });
 
