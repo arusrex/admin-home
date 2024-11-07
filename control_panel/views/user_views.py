@@ -152,6 +152,7 @@ def edit_user(request, id):
                     )
                     messages.success(request, f'Senha de usuário {user_obj} alterada')
                     print(f'Senha de usuário {user_obj} alterada')
+                    return redirect('control_panel:users')
             else:
                 form.save()
                 user_log_activity(
@@ -186,6 +187,7 @@ def delete_user(request, id):
         )
         messages.success(request, f'Usuário {user_obj} deletado')
         print(f'Usuário {user_obj} deletado')
+        return redirect('control_panel:users')
     except Exception as error:
         messages.error(request, f'Erro ao deletar {user_obj}: {error}')
         print(f'Erro ao deletar {user_obj}: {error}')
