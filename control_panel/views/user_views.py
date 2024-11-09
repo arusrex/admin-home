@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from control_panel.forms import CustomUserUpdateForm, InsertNewUserForm
+from control_panel.forms import CustomUserUpdateForm, UserCreationForm, InsertNewUserForm, UpdateUserForm
 from sitesetup.context_processors import user_log_activity
 from django.contrib.auth.models import User
 from sitesetup.context_processors import get_client_ip
 from django.contrib import messages
+from django.contrib.auth.forms import UserChangeForm
 
 @login_required
 def user_data(request):
@@ -72,50 +73,16 @@ def users(request):
     users = User.objects.all().order_by('first_name')
     if request.method == 'POST':
         form = InsertNewUserForm(request.POST)
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        is_active = request.POST.get('is_active') == 'on'
-        is_staff = request.POST.get('is_staff') == 'on'
-        is_superuser = request.POST.get('is_superuser') == 'on'
-        email = request.POST.get('email')
-        user = request.POST.get('username')
-        new_password1 = request.POST.get('password1')
-        new_password2 = request.POST.get('password2')
 
-        print(request.POST)
+        if form.is_valid():
+            print('Form valid')
+            form.save()
+            messages.success(request, 'Novo usuário criado com sucesso')
+            print('Novo usuário criado com sucesso')
+            return redirect('control_panel:users')
+        else:
+            print(form.errors)
 
-        try:
-            if User.objects.filter(email=email).exists() or User.objects.filter(username=user).exists():
-                print(f'Email ou Nome de Usuário já registrado')
-            else:
-                if form.is_valid():
-                    if new_password1 != new_password2:
-                        print('Senhas não coincidem')
-                    else:
-                        new_user = User.objects.create(
-                            username=user,
-                            first_name=first_name,
-                            last_name=last_name,
-                            email=email,
-                            is_active=is_active,
-                            is_staff=is_staff,
-                            is_superuser=is_superuser,
-                            )
-                        new_user.set_password(new_password1)
-                        new_user.save()
-                        user_log_activity(
-                            user_data,
-                            f'Novo usuário ({new_user.username}) registrado',
-                            get_client_ip(request),
-                        )
-                        messages.success(request, 'Novo usuário criado com sucesso')
-                        print('Novo usuário criado com sucesso')
-                        return redirect('control_panel:users')
-            
-        except Exception as error:
-            messages.error(request, 'Erro ao criar usuário')
-            print(f'Erro ao criar usuário: {error}')
-        
     form = InsertNewUserForm()
 
     context = {
@@ -132,40 +99,51 @@ def edit_user(request, id):
     users = User.objects.all().order_by('first_name')
 
     if request.method == 'POST':
-        print(request.POST)
-        form = InsertNewUserForm(request.POST, instance=user_obj)
+        form = UpdateUserForm(request.POST, instance=user_obj)
         
         if form.is_valid():
-            new_password1 = request.POST.get('password1')
-            new_password2 = request.POST.get('password2')
-            if new_password1:
-                if new_password1 != new_password2:
-                    print('Senhas não coincidem')
-                else:
-                    form.save(commit=False)
-                    user_obj.set_password(new_password1)
-                    user_obj.save()
-                    user_log_activity(
-                        user_data,
-                        f'Senha de usuário ({user_obj}) alterada',
-                        get_client_ip(request),
-                    )
-                    messages.success(request, f'Senha de usuário {user_obj} alterada')
-                    print(f'Senha de usuário {user_obj} alterada')
-                    return redirect('control_panel:users')
-            else:
-                form.save()
-                user_log_activity(
-                    user_data,
-                    f'Usuário ({user_obj}) editado',
-                    get_client_ip(request),
-                )
-                messages.success(request, 'Usuário editado com sucesso')
-                print('Usuário editado com sucesso')
-                return redirect('control_panel:users')
+            form.save()
+            messages.success(request, f'Senha de usuário {user_obj} alterada')
+            print(f'Senha de usuário {user_obj} alterada')
+            user_log_activity(
+                user_data,
+                f'Senha de usuário ({user_obj}) alterada',
+                get_client_ip(request),
+            )
+            return redirect('control_panel:users')
+
+            # new_password1 = request.POST.get('password1')
+            # new_password2 = request.POST.get('password2')
+            # if new_password1:
+            #     if new_password1 != new_password2:
+            #         print('Senhas não coincidem')
+            #     else:
+            #         form.save(commit=False)
+            #         user_obj.set_password(new_password1)
+            #         user_obj.save()
+            #         user_log_activity(
+            #             user_data,
+            #             f'Senha de usuário ({user_obj}) alterada',
+            #             get_client_ip(request),
+            #         )
+            #         messages.success(request, f'Senha de usuário {user_obj} alterada')
+            #         print(f'Senha de usuário {user_obj} alterada')
+            #         return redirect('control_panel:users')
+            # else:
+            #     form.save()
+            #     user_log_activity(
+            #         user_data,
+            #         f'Usuário ({user_obj}) editado',
+            #         get_client_ip(request),
+            #     )
+            #     messages.success(request, 'Usuário editado com sucesso')
+            #     print('Usuário editado com sucesso')
+            #     return redirect('control_panel:users')
+        else:
+            print(form.errors)
 
     else:
-        form = InsertNewUserForm(instance=user_obj)
+        form = UpdateUserForm(instance=user_obj)
 
     context = {
         'data_table': users,

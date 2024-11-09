@@ -7,59 +7,50 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Usuários</li>
             </ol>
-            <div class="form-control my-2" style="max-width: 720px;">
+            <div class="form-control my-2">
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Registro de Usuários</li>
                 </ol>
                 <form class="row my-2" method="POST">
                     {% csrf_token %}
-                    <div class="col-sm-6 my-2">
-                        {{form.username.errors}}
-                        {{form.username.label_tag}}
-                        {{form.username}}
-                    </div>
-                    <div class="col-sm-6 my-2">
-                        {{form.first_name.errors}}
-                        {{form.first_name.label_tag}}
-                        {{form.first_name}}
-                    </div>
-                    <div class="col-sm-6 my-2">
-                        {{form.last_name.errors}}
-                        {{form.last_name.label_tag}}
-                        {{form.last_name}}
-                    </div>
-                    <div class="col-sm-6 my-2">
-                        {{form.email.errors}}
-                        {{form.email.label_tag}}
-                        {{form.email}}
-                    </div>
-                    <div class="col-sm-6 my-2">
-                        <label for="id_password1">Senha:</label>
-                        <input type="password" class="form-control" name="password1" id="id_password1">
-                    </div>
-                    <div class="col-sm-6 my-2">
-                        <label for="id_password2">Confirmar Senha:</label>
-                        <input type="password" class="form-control" name="password2" id="id_password2">
-                    </div>
-                    <div class="col-sm-4 my-2">
-                        {{form.is_active.errors}}
-                        {{form.is_active.label_tag}}
-                        {{form.is_active}}
-                    </div>
-                    <div class="col-sm-4 my-2">
-                        {{form.is_staff.errors}}
-                        {{form.is_staff.label_tag}}
-                        {{form.is_staff}}
-                    </div>
-                    <div class="col-sm-4 my-2">
-                        {{form.is_superuser.errors}}
-                        {{form.is_superuser.label_tag}}
-                        {{form.is_superuser}}
-                    </div>
+                    
+                    <!-- Exibe erros gerais do formulário -->
+                    {% if form.non_field_errors %}
+                        <div class="col-12">
+                            {% for error in form.non_field_errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Exibe cada campo com seus erros e help_text -->
+                    {% for field in form %}
+                        <div class="col-sm-6 my-2">
+                            <!-- Exibe o label do campo -->
+                            {{ field.label_tag }}
+                            
+                            <!-- Exibe o campo do formulário -->
+                            {{ field }}
+                            
+                            <!-- Exibe o help_text, se houver -->
+                            {% if field.help_text %}
+                                <small class="text-muted">{{ field.help_text|safe }}</small>
+                            {% endif %}
+                            
+                            <!-- Exibe os erros do campo, se houver -->
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
                     <div>
                         <button class="btn btn-primary m-2" type="submit">Salvar</button>
                     </div>
                 </form>
+                
             </div>
             <div class="card mb-4 card-div-dark">
                 <div class="card-header card-div-dark">
