@@ -108,3 +108,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const password1 = document.querySelector('#id_password1');
+    const password2 = document.querySelector('#id_password2');
+    const newPassword1 = document.querySelector('#id_new_password1');
+    const newPassword2 = document.querySelector('#id_new_password2');
+    const checks = document.querySelectorAll('.form-check-input');
+
+    console.log(checks);
+    checks.forEach(col3);
+
+    function col3 (value) {
+        value.parentElement.classList.replace('col-sm-6', 'col-sm-4')
+    }
+    
+    addFormControl(newPassword1, newPassword2, password1, password2);
+
+    function addFormControl (...args) {
+        for (let arg of args) {
+            if (arg) {
+                arg.classList.add('form-control');
+            }
+        }
+    }
+})

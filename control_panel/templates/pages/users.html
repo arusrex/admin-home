@@ -9,8 +9,14 @@
             </ol>
             <div class="form-control my-2">
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">Registro de Usuários</li>
+                    <li class="breadcrumb-item active">{% if action == "create" %}Novo Usuário{% elif action == 'edit' %}Atualizar Usuário{% elif action == 'password' %}Atualizar Senha do Usuário{% endif %}</li>
                 </ol>
+                {% if action == 'edit' or action == 'password' %}
+                <div>
+                    <a class="btn btn-primary m-2" href="{% url "control_panel:users" %}">Novo Usuário</a>
+                </div>
+                {% endif %}
+
                 <form class="row my-2" method="POST">
                     {% csrf_token %}
                     
@@ -47,10 +53,9 @@
                     {% endfor %}
                     
                     <div>
-                        <button class="btn btn-primary m-2" type="submit">Salvar</button>
+                        <button class="btn btn-primary m-2" type="submit">{% if action == 'create' %}Salvar{% elif action == 'edit' or action == 'password' %}Atualizar{% endif %}</button>
                     </div>
                 </form>
-                
             </div>
             <div class="card mb-4 card-div-dark">
                 <div class="card-header card-div-dark">
@@ -70,6 +75,7 @@
                                 <th>Administrador?</th>
                                 <th>Último Login</th>
                                 <th>Criado em</th>
+                                {% if user.is_staff and user.is_superuser %}<th>Senha</th>{% endif %}
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -84,6 +90,7 @@
                                 <th>Administrador?</th>
                                 <th>Último Login</th>
                                 <th>Criado em</th>
+                                {% if user.is_staff and user.is_superuser %}<th>Senha</th>{% endif %}
                                 <th>Ações</th>
                             </tr>
                         </tfoot>
@@ -99,6 +106,7 @@
                                     <td>{% if value.is_superuser is True %}Sim{% else %}Não{% endif %}</td>
                                     <td>{{value.last_login|default_if_none:"Não logou"}}</td>
                                     <td>{{value.date_joined}}</td>
+                                    {% if user.is_staff and user.is_superuser %}<td><a href="{% url 'control_panel:edit_user_password' value.id %}">Alterar senha</a></td>{% endif %}
                                     <td>
                                         <a href="{% url "control_panel:edit_user" value.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
                                         {% comment %} <a href="{% url "control_panel:delete_user" value.id %}"><i class="fa-solid fa-trash"></i></a> {% endcomment %}

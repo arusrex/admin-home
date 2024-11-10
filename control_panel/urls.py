@@ -35,6 +35,7 @@ urlpatterns = [
     # USERS
     path('users/', views.users, name="users"),
     path('edit_user/<int:id>/', views.edit_user, name="edit_user"),
+    path('edit_user/password/<int:id>/', views.edit_user_password, name="edit_user_password"),
     path('delete_user/<int:id>/', views.delete_user, name="delete_user"),
 
     path('main_menus/', views.main_menus, name='main_menus'),
